@@ -52,7 +52,12 @@ initial begin
     @(negedge clk)
     a_in = 32'hdeadbeef; wen_a = 1'b1; ren_a = 1'b0;
     @(negedge clk)
-    a_in = 32'h00000000; wen_a = 1'b0; ren_a = 1'b0;
+    // Skip this one since write enable is 0
+    a_in = 32'ha5a5a5a5; wen_a = 1'b0; ren_a = 1'b0;
+    @(negedge clk)
+    a_in = 32'hfeed2b0b; wen_a = 1'b1; ren_a = 1'b0;
+    @(negedge clk)
+    a_in = 32'h00000001; wen_a = 1'b1; ren_a = 1'b0;
 
     if(a_out != 32'hdeadbeef) begin
         $error("Matrix A read data mismatch = got %x expected deadbeef",
@@ -60,7 +65,20 @@ initial begin
     end
 
     @(negedge clk)
-    ren_a = 1'b1;
+    a_in = 32'hFFFFFFFF; wen_a = 1'b0; ren_a = 1'b1;
+    if(a_out != 32'hfeed2b0b) begin
+        $error("Matrix A read data mismatch = got %x expected feed2b0b",
+	       a_out);
+    end
+
+    @(negedge clk)
+    if(a_out != 32'h00000001) begin
+        $error("Matrix A read data mismatch = got %x expected 00000001",
+	       a_out);
+    end
+
+    @(negedge clk)
+    a_in = 32'hFFFFFFFF; wen_a = 1'b0; ren_a = 1'b0;
 
 end
 
