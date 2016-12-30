@@ -1,0 +1,17 @@
+vivado/macc.cache/
+vivado/macc.hw/
+vivado/macc.ip_user_files/
+vivado/macc.sim/
+vivado/macc.runs/
+
+ip/*_stub.v
+ip/*_stub.vhdl
+ip/*_netlist.v
+ip/*_netlist.vhdl
+ip/*.dcp
+ip/*.xdc
+ip/doc/
+ip/hdl/
+ip/sim/
+ip/simulation/
+ip/synth/
