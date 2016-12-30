@@ -5,6 +5,8 @@ This project aims to provide an IP block for snickerdoodle that can be used to
 offload matrix operations from the Cortex-A9 included in the FPGA. This IP
 should work on other Zync-7000 boards but will only be tested on snickerdoodle. 
 
+You can read about the snickerdoodle board at [krtkl.com](http://krtkl.com)
+
 ## Current Specifications
 
 * Project is just getting started - check back soon.
@@ -160,6 +162,15 @@ formats are not currently supported.
 
 
 # Design Information
+
+## Challenges
+
+### Matrix Storage
+
+A lot of RAM is required to store 3 1024x1024 matrices with 32-bit values in 
+them.  The Zync parts being targeted have 36kb of block RAM available which
+isn't nearly enough to store even 1 of the matrices - this design "smell"
+suggests that matrix size reduction may be required.
 
 ## Development Process
 
