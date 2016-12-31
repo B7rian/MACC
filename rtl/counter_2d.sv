@@ -32,8 +32,7 @@ always_comb begin
     end
     else begin
 	if(inc) begin
-	    // casex seems easier to read than an if-then-else 
-	    casex({(col_int >= col_max), (row_int >= row_max)})
+	    unique case({(col_int >= col_max), (row_int >= row_max)}) inside
 		2'b0?: begin
 		    row_nxt = row_int;
 		    col_nxt = col_int + 10'h1;
@@ -42,7 +41,7 @@ always_comb begin
 		    row_nxt = row_int + 10'h1;
 		    col_nxt = 16'h0;
 		end
-		default: begin
+		2'b11: begin
 		    row_nxt = 16'h0;
 		    col_nxt = 16'h0;
 		end
