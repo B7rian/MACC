@@ -37,8 +37,8 @@ matrix_ctrl ctrl_A (
     .RST_L (RST_L),
     .we (wen[2]),
     .re (ren[2]),
-    .max_col_count (10'h3ff),
-    .max_row_count (10'h3ff),
+    .max_col_count (10'h1ff),
+    .max_row_count (10'h1ff),
     .ram_sel (ram_sel_to_matrix[2]),
     .a (addr_to_matrix[2]),
     .we_out (we_to_matrix[2])
