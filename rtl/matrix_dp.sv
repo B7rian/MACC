@@ -25,29 +25,27 @@ genvar i;
 
 // RAM output mux - drive dout output port based on ram_sel input
 // TODO: Possibly improve this implementation with IP block
-// NOTE: In Verilog 2001, this is a priority encoder and doesn't need casez
-always @(*)
-begin
-    case(ram_sel)
-	16'h0001: ram_dout = ram_spo[0];
-	16'h0002: ram_dout = ram_spo[1];
-	16'h0004: ram_dout = ram_spo[2];
-	16'h0008: ram_dout = ram_spo[3];
+always_comb begin
+    unique case(1'b1)
+	ram_sel[0]: ram_dout = ram_spo[0];
+	ram_sel[1]: ram_dout = ram_spo[1];
+	ram_sel[2]: ram_dout = ram_spo[2];
+	ram_sel[3]: ram_dout = ram_spo[3];
 
-	16'h0010: ram_dout = ram_spo[4];
-	16'h0020: ram_dout = ram_spo[5];
-	16'h0040: ram_dout = ram_spo[6];
-	16'h0080: ram_dout = ram_spo[7];
+	ram_sel[4]: ram_dout = ram_spo[4];
+	ram_sel[5]: ram_dout = ram_spo[5];
+	ram_sel[6]: ram_dout = ram_spo[6];
+	ram_sel[7]: ram_dout = ram_spo[7];
 
-	16'h0100: ram_dout = ram_spo[8];
-	16'h0200: ram_dout = ram_spo[9];
-	16'h0400: ram_dout = ram_spo[10];
-	16'h0800: ram_dout = ram_spo[11];
+	ram_sel[8]: ram_dout = ram_spo[8];
+	ram_sel[9]: ram_dout = ram_spo[9];
+	ram_sel[10]: ram_dout = ram_spo[10];
+	ram_sel[11]: ram_dout = ram_spo[11];
 
-	16'h1000: ram_dout = ram_spo[12];
-	16'h2000: ram_dout = ram_spo[13];
-	16'h4000: ram_dout = ram_spo[14];
-	default:  ram_dout = ram_spo[15];
+	ram_sel[12]: ram_dout = ram_spo[12];
+	ram_sel[13]: ram_dout = ram_spo[13];
+	ram_sel[14]: ram_dout = ram_spo[14];
+	ram_sel[15]:  ram_dout = ram_spo[15];
     endcase
 end
 assign dout = ram_dout;
