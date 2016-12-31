@@ -6,8 +6,6 @@
 `timescale 1ns / 100ps
 
 module reg2_32b(
-    input  VDD,
-    input  GND,
     input  CLK,
     input  RST_L,
     input  [31:0] din0,

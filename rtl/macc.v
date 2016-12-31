@@ -7,8 +7,6 @@
 `timescale 1ns / 100ps
 
 module macc(
-    input VDD,
-    input GND,
     input CLK,
     input RST_L,
     input [2:0] wen, // 2 -> A, 1 -> B, 0 -> C
@@ -31,8 +29,6 @@ wire [15:0] we_to_matrix[2:0];		// Matrix write-enables
 // 
 
 matrix_ctrl ctrl_A (
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .we (wen[2]),
@@ -45,8 +41,6 @@ matrix_ctrl ctrl_A (
 );
 
 matrix_dp dp_A(
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .ram_sel (ram_sel_to_matrix[2]),

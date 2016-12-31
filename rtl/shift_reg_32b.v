@@ -5,8 +5,6 @@
 `timescale 1ns / 100ps
 
 module shift_reg_32b(
-    input  VDD,
-    input  GND,
     input  CLK,
     input  RST_L,
     input  [31:0] din,
@@ -18,8 +16,6 @@ wire [31:0] shift_dout [0:1023];
 
 // First register is a special case since input comes from port
 reg2_32b R0(
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .din0 (din),	// Input for shift right
@@ -34,8 +30,6 @@ generate
     for(i = 1; i < 1023; i = i + 1)
     begin: shift_reg
 	reg2_32b R(
-	    .VDD (VDD),
-	    .GND (GND),
 	    .CLK (CLK),
 	    .RST_L (RST_L),
 	    .din0 (shift_dout[i - 1]),
@@ -48,8 +42,6 @@ endgenerate
 
 // Last register is special case since input comes from port
 reg2_32b R1023(
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .din0 (shift_dout[1022]),

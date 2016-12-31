@@ -8,8 +8,6 @@
 `timescale 1ns / 100ps
 
 module matrix_ctrl (
-    input VDD,
-    input GND,
     input CLK,
     input RST_L,
     input we,
@@ -32,8 +30,6 @@ wire [9:0] wr_row;
 wire [9:0] wr_col;
 
 counter_2d read_counter(
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .row_max(max_row_count),
@@ -44,8 +40,6 @@ counter_2d read_counter(
 );
 
 counter_2d write_counter(
-    .VDD (VDD),
-    .GND (GND),
     .CLK (CLK),
     .RST_L (RST_L),
     .row_max(max_row_count),

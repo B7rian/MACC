@@ -5,8 +5,6 @@
 `timescale 1ns / 100ps
 
 module matrix_dp(
-    input  VDD,
-    input  GND,
     input  CLK,
     input  RST_L,
     input  [15:0] ram_sel,

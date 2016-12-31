@@ -5,8 +5,6 @@
 `timescale 1ns / 100ps
 
 module counter_2d(
-    input VDD,
-    input GND,
     input CLK,
     input RST_L,
     input [9:0] row_max,
@@ -27,18 +25,23 @@ always_comb begin
     end
     else begin
 	if(inc) begin
-	    unique case({(col >= col_max), (row >= row_max)}) inside
-		2'b0?: begin
+        // TODO: Figure out why case...inside results in warning herer
+	    unique case({(col >= col_max), (row >= row_max)})
+		2'b00: begin
 		    row_nxt = row;
 		    col_nxt = col + 10'h1;
 		end
+		2'b01: begin
+            row_nxt = row;
+            col_nxt = col + 10'h1;
+        end
 		2'b10: begin
 		    row_nxt = row + 10'h1;
-		    col_nxt = 16'h0;
+		    col_nxt = 10'h0;
 		end
 		2'b11: begin
-		    row_nxt = 16'h0;
-		    col_nxt = 16'h0;
+		    row_nxt = 10'h0;
+		    col_nxt = 10'h0;
 		end
 	    endcase
 	end
