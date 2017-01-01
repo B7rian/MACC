@@ -9,17 +9,28 @@ You can read about the snickerdoodle board at [krtkl.com](http://krtkl.com)
 
 ## Current Specifications
 
-* Project is just getting started - check back soon.
+* Logic is in place to store a single 1024x1024 matrix and read it back but 
+I have only tested the first 3 writes and reads.
+
+### To Do
+* Specify timing contraints and get a timing report
+* Map I/O port and get implementtion to succeed
+* Generate 1st bitstream
+* Refactor testbench and perform more functional testing
+* Added matrices B and C
+* Add some multiply-accumulators and crunch some numbers!
 
 ## Target Specifications
 
 * Support for matrices up to 1024 x 1024 in size 
+    * H.265 uses 32x32, so 1024x1024 is plenty
+    * Audio and RF DSP will probably need 1D array - need to research the size  
 * 8, 16, 32- bit signed or unsigned integer data supported
 * Floating-point support TBD based on available Xilinx IP
 * Saturating multiply and multiply-accumulate operations. Other functions TBD. 
 * Each matrix has its own read/write register to support parallel data input
-* 64-bit data interface for matrix load/store (AXI wrapper to be provided later)
-* Data processed as soon as it becomes available to minimize latency
+* 64-bit data interface for matrix load/store via AXI interface
+* Data processed as it arrives at the input register to minimize latency
 * Result from operation can be used in next operation without reading and 
   re-writing the data to a new location
 * FPGA cell usage TBD
@@ -169,18 +180,20 @@ formats are not currently supported.
 
 A lot of RAM is required to store 3 1024x1024 matrices with 32-bit values in 
 them.  The Zync parts being targeted have 36kb of block RAM available which
-isn't nearly enough to store even 1 of the matrices - this design "smell"
-suggests that matrix size reduction may be required.
+isn't nearly enough to store even 1 of the matrices.  I may have to reduce
+the target matrix size, which isn't an issue as I haven't found any algorithms
+that need something more than 32x32.
 
 ## Development Process
 
 HDL designs implemented with FPGAs have a low build cost similar to sotware,
 and are suitable for agile developement. 
 
-* TDD is included. Testbenches and tests are written before each feature and 
-  are included in the repository
 * Releases will be done in small increments
-* Test benches will be as UVM-like as they can be without SystemVerilog support. 
+* I'll do everything I can to make the design easy to change
+* TDD is included. Testbenches and tests are written before each feature and 
+  are included in the repository.
+* Test benches will be UVM-ish but without using the UVM reference model
 
 
 
