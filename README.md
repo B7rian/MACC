@@ -9,10 +9,11 @@ You can read about the snickerdoodle board at [krtkl.com](http://krtkl.com)
 
 ## Current Specifications
 
-* Logic is in place to store a single 1024x1024 matrix and read it back but 
-I have only tested the first 3 writes and reads.
+* Logic is in place to store a single matrix using up to 4096 elements
+and read it back.  Currently a 64x64 matrix is hard-coded.
 
 ### To Do
+* Functional test and debug
 * Specify timing contraints and get a timing report
 * Map I/O port and get implementtion to succeed
 * Generate 1st bitstream
@@ -22,8 +23,8 @@ I have only tested the first 3 writes and reads.
 
 ## Target Specifications
 
-* Support for matrices up to 1024 x 1024 in size 
-    * H.265 uses 32x32, so 1024x1024 is plenty
+* Support for matrices up to 64x64 in size 
+    * H.265 uses 32x32, so 64x64 is plenty
     * Audio and RF DSP will probably need 1D array - need to research the size  
 * 8, 16, 32- bit signed or unsigned integer data supported
 * Floating-point support TBD based on available Xilinx IP
@@ -71,7 +72,7 @@ Input matrices are called matrix A and B.  The result is called matrix C.
    and and interrupt will fire. Read result out of engine from matrix C
    using PIO or DMA. 
 
-### Register Definition
+### Register Definition (NEEDS UPDATE)
 
 These definitions are subject to change
 
@@ -178,11 +179,20 @@ formats are not currently supported.
 
 ### Matrix Storage
 
-A lot of RAM is required to store 3 1024x1024 matrices with 32-bit values in 
-them.  The Zync parts being targeted have 36kb of block RAM available which
-isn't nearly enough to store even 1 of the matrices.  I may have to reduce
-the target matrix size, which isn't an issue as I haven't found any algorithms
-that need something more than 32x32.
+A lot of RAM is required to store 3 1024x1024 matrices with 32-bit samples
+and coefficients in them.  The Zync 710 has some options here:
+
+1. Up to 2.1Mb of block RAM is offered, in 60 36kb chunks
+2. Distributed RAM can be used, and utilizes some of the 17,600 LUT cells
+
+My original plan was to offer 1024x1024 matrices, but each (of 3) would require
+32Mb of RAM to store.  Some quick research shows that H.265 video codecs
+require 32x32 matrices, and audio require 128x1 elements of storage.  Based on
+this, matrix size will be 64x256 to support a 64x64 segment of an image or 
+256 elements of an audio or RF signal.  That's 512kb per matrix.
+
+Memory optimizations will be made later to reduce RAM usage to 132kb, which 
+can support both 64x64 or 256x1 with 32-bit samples.
 
 ## Development Process
 

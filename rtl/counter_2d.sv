@@ -1,59 +1,57 @@
 //
 // 2D (row & column) counter
 //
+// This is just a regular linear counter with some logic to convert the
+// address to row and column indices
+//
 
 `timescale 1ns / 100ps
 
-module counter_2d(
+module counter_2d #(parameter MSB=11) (
     input CLK,
     input RST_L,
-    input [9:0] row_max,
-    input [9:0] col_max,
+    input [MSB:0] row_max,
+    input [MSB:0] col_max,
     input inc,
-    output logic [9:0] row,
-    output logic [9:0] col
+    output logic [MSB:0] a,	// Linerized address
+    output logic [MSB:0] row,	// Row index
+    output logic [MSB:0] col	// Column index
 );
 
-reg [9:0] row_nxt;	// Next value for row count
-reg [9:0] col_nxt;	// Next value for column count
+reg [MSB:0] a_nxt;	// Next value for address output
+reg [MSB:0] row_nxt;	// Next value for row count
+reg [MSB:0] col_nxt;	// Next value for column count
 
-// Combinational logic
+int i;			// Loop counter for log2 calculation
+
+
+// Combinational logic 
 always_comb begin
     if(!RST_L) begin
-	row_nxt = 10'h0;
-	col_nxt = 10'h0;
+	a_nxt = 'h0;
     end
     else begin
-	if(inc) begin
-        // TODO: Figure out why case...inside results in warning herer
-	    unique case({(col >= col_max), (row >= row_max)})
-		2'b00: begin
-		    row_nxt = row;
-		    col_nxt = col + 10'h1;
-		end
-		2'b01: begin
-            row_nxt = row;
-            col_nxt = col + 10'h1;
-        end
-		2'b10: begin
-		    row_nxt = row + 10'h1;
-		    col_nxt = 10'h0;
-		end
-		2'b11: begin
-		    row_nxt = 10'h0;
-		    col_nxt = 10'h0;
-		end
-	    endcase
-	end
-	else begin
-	    row_nxt = row;
-	    col_nxt = col;
-	end
+	a_nxt = inc ? (a + 1) : a;
+
     end
+
+    col_nxt = a_nxt & col_max;
+    
+    // Compute log2(col_max) to figure out how much to shift a_nxt to get row
+    // col_max must be a power of 2 for this to work right.
+    // Note: Could use case here but wouldn't parameterize well
+    i = 0;
+    while(col_max[i]) begin
+       i++;
+    end
+
+    row_nxt = a_nxt >> i;
 end
+
 
 // Flops
 always_ff @(posedge CLK) begin
+    a <= a_nxt;
     row <= row_nxt;
     col <= col_nxt;
 end
