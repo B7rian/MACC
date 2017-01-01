@@ -31,8 +31,7 @@ always_comb begin
 	a_nxt = 'h0;
     end
     else begin
-	a_nxt = inc ? (a + 1) : a;
-
+	a_nxt = inc ? (a + 'b1) : a;
     end
 
     col_nxt = a_nxt & col_max;

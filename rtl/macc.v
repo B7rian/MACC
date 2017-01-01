@@ -34,8 +34,8 @@ matrix_ctrl #(.ADDR_MSB(11)) ctrl_A (
     .RST_L (RST_L),
     .we (wen[2]),
     .re (ren[2]),
-    .max_col_count (10'h3f),
-    .max_row_count (10'h3f),
+    .max_col_count (12'h3f),
+    .max_row_count (12'h3f),
     .a (addr_to_matrix[2])
 );
 

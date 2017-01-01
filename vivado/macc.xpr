@@ -30,20 +30,20 @@
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="snickerdoodle_black"/>
     <Option Name="DSANumComputeUnits" Val="16"/>
-    <Option Name="WTXSimLaunchSim" Val="35"/>
+    <Option Name="WTXSimLaunchSim" Val="52"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="5"/>
-    <Option Name="WTModelSimExportSim" Val="5"/>
-    <Option Name="WTQuestaExportSim" Val="5"/>
-    <Option Name="WTIesExportSim" Val="5"/>
-    <Option Name="WTVcsExportSim" Val="5"/>
-    <Option Name="WTRivieraExportSim" Val="5"/>
-    <Option Name="WTActivehdlExportSim" Val="5"/>
+    <Option Name="WTXSimExportSim" Val="6"/>
+    <Option Name="WTModelSimExportSim" Val="6"/>
+    <Option Name="WTQuestaExportSim" Val="6"/>
+    <Option Name="WTIesExportSim" Val="6"/>
+    <Option Name="WTVcsExportSim" Val="6"/>
+    <Option Name="WTRivieraExportSim" Val="6"/>
+    <Option Name="WTActivehdlExportSim" Val="6"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -67,23 +67,8 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../ip/bram_32bx4096d_1cyc.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/../rtl/macc.v">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../rtl/matrix_dp.sv">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -126,17 +111,16 @@
         <Option Name="XSimWcfgFile" Val="$PPRDIR/../test/macc_tb_behav.wcfg"/>
       </Config>
     </FileSet>
-    <FileSet Name="dist_mem_gen_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/dist_mem_gen_0">
-      <File Path="$PPRDIR/../ip/dist_mem_gen_0.xci">
+    <FileSet Name="bram_32bx4096d_1cyc" Type="BlockSrcs" RelSrcDir="$PSRCDIR/bram_32bx4096d_1cyc">
+      <File Path="$PPRDIR/../ip/bram_32bx4096d_1cyc/bram_32bx4096d_1cyc.xci">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TopModule" Val="dist_mem_gen_0"/>
+        <Option Name="TopModule" Val="bram_32bx4096d_1cyc"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -168,9 +152,11 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="dist_mem_gen_0_synth_1" Type="Ft3:Synth" SrcSet="dist_mem_gen_0" Part="xc7z010clg400-1" ConstrsSet="dist_mem_gen_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/dist_mem_gen_0_synth_1" IncludeInArchive="true">
+    <Run Id="bram_32bx4096d_1cyc_synth_1" Type="Ft3:Synth" SrcSet="bram_32bx4096d_1cyc" Part="xc7z010clg400-1" ConstrsSet="bram_32bx4096d_1cyc" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/bram_32bx4096d_1cyc_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -192,9 +178,11 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="dist_mem_gen_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z010clg400-1" ConstrsSet="dist_mem_gen_0" Description="Default settings for Implementation." SynthRun="dist_mem_gen_0_synth_1" IncludeInArchive="false">
+    <Run Id="bram_32bx4096d_1cyc_impl_1" Type="Ft2:EntireDesign" Part="xc7z010clg400-1" ConstrsSet="bram_32bx4096d_1cyc" Description="Default settings for Implementation." SynthRun="bram_32bx4096d_1cyc_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
