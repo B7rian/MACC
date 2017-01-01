@@ -29,7 +29,7 @@ wire [11:0] addr_to_matrix[2:0];	// Matrix RAM address A, B, C
 // Instantiate control block and datapath for matrix A
 // 
 
-matrix_ctrl ctrl_A (
+matrix_ctrl #(.ADDR_MSB(11)) ctrl_A (
     .CLK (CLK),
     .RST_L (RST_L),
     .we (wen[2]),
@@ -47,7 +47,7 @@ bram_32bx4096d_1cyc dp_A (
   .wea(wen[2]),
   .addra(addr_to_matrix[2]), // 11:0
   .dina(matrix_a_in),    // input wire [31 : 0] dina
-  .douta(matrix_a_out)  // output wire [31 : 0] douta
+  .douta(matrix_a_out)   // output wire [31 : 0] douta
 );
 
 
