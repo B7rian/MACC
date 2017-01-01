@@ -11,13 +11,12 @@ module matrix_dp(
     input  [15:0] a,
     input  [31:0] din,
     input  [15:0] we,
-    output [31:0] dout
+    output logic [31:0] dout
 );
 
 // work in progress - just try to get something to place & route right now
 
 wire [31:0] ram_spo[15:0];	// Single port data output for each RAM
-reg  ram_dout;			// Value to drive to output port
 genvar i;
 
 
@@ -25,28 +24,27 @@ genvar i;
 // TODO: Possibly improve this implementation with IP block
 always_comb begin
     unique case(1'b1)
-	ram_sel[0]: ram_dout = ram_spo[0];
-	ram_sel[1]: ram_dout = ram_spo[1];
-	ram_sel[2]: ram_dout = ram_spo[2];
-	ram_sel[3]: ram_dout = ram_spo[3];
+	ram_sel[0]: dout = ram_spo[0];
+	ram_sel[1]: dout = ram_spo[1];
+	ram_sel[2]: dout = ram_spo[2];
+	ram_sel[3]: dout = ram_spo[3];
 
-	ram_sel[4]: ram_dout = ram_spo[4];
-	ram_sel[5]: ram_dout = ram_spo[5];
-	ram_sel[6]: ram_dout = ram_spo[6];
-	ram_sel[7]: ram_dout = ram_spo[7];
+	ram_sel[4]: dout = ram_spo[4];
+	ram_sel[5]: dout = ram_spo[5];
+	ram_sel[6]: dout = ram_spo[6];
+	ram_sel[7]: dout = ram_spo[7];
 
-	ram_sel[8]: ram_dout = ram_spo[8];
-	ram_sel[9]: ram_dout = ram_spo[9];
-	ram_sel[10]: ram_dout = ram_spo[10];
-	ram_sel[11]: ram_dout = ram_spo[11];
+	ram_sel[8]: dout = ram_spo[8];
+	ram_sel[9]: dout = ram_spo[9];
+	ram_sel[10]: dout = ram_spo[10];
+	ram_sel[11]: dout = ram_spo[11];
 
-	ram_sel[12]: ram_dout = ram_spo[12];
-	ram_sel[13]: ram_dout = ram_spo[13];
-	ram_sel[14]: ram_dout = ram_spo[14];
-	ram_sel[15]:  ram_dout = ram_spo[15];
+	ram_sel[12]: dout = ram_spo[12];
+	ram_sel[13]: dout = ram_spo[13];
+	ram_sel[14]: dout = ram_spo[14];
+	ram_sel[15]: dout = ram_spo[15];
     endcase
 end
-assign dout = ram_dout;
 
 
 // Generate RAM blocks.  Each ram is 64k rows.  16 RAMs are required to 

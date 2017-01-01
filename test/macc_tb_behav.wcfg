@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="macc_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="macc_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="6000000fs"></ZoomStartTime>
+      <ZoomEndTime time="21580001fs"></ZoomEndTime>
+      <Cursor1Time time="15000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="22" />
+   <wvobject fp_name="/macc_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/wen_a" type="logic">
+      <obj_property name="ElementShortName">wen_a</obj_property>
+      <obj_property name="ObjectShortName">wen_a</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/ren_a" type="logic">
+      <obj_property name="ElementShortName">ren_a</obj_property>
+      <obj_property name="ObjectShortName">ren_a</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/a_in" type="array">
+      <obj_property name="ElementShortName">a_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">a_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/a_out" type="array">
+      <obj_property name="ElementShortName">a_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">a_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/we" type="logic">
+      <obj_property name="ElementShortName">we</obj_property>
+      <obj_property name="ObjectShortName">we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/re" type="logic">
+      <obj_property name="ElementShortName">re</obj_property>
+      <obj_property name="ObjectShortName">re</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/max_col_count" type="array">
+      <obj_property name="ElementShortName">max_col_count[9:0]</obj_property>
+      <obj_property name="ObjectShortName">max_col_count[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/max_row_count" type="array">
+      <obj_property name="ElementShortName">max_row_count[9:0]</obj_property>
+      <obj_property name="ObjectShortName">max_row_count[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/ram_sel" type="array">
+      <obj_property name="ElementShortName">ram_sel[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_sel[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/a" type="array">
+      <obj_property name="ElementShortName">a[15:0]</obj_property>
+      <obj_property name="ObjectShortName">a[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/we_out" type="array">
+      <obj_property name="ElementShortName">we_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">we_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/rd_row" type="array">
+      <obj_property name="ElementShortName">rd_row[9:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_row[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/rd_col" type="array">
+      <obj_property name="ElementShortName">rd_col[9:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_col[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/wr_row" type="array">
+      <obj_property name="ElementShortName">wr_row[9:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_row[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/wr_col" type="array">
+      <obj_property name="ElementShortName">wr_col[9:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_col[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/read_counter/inc" type="logic">
+      <obj_property name="ElementShortName">inc</obj_property>
+      <obj_property name="ObjectShortName">inc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/read_counter/row" type="array">
+      <obj_property name="ElementShortName">row[9:0]</obj_property>
+      <obj_property name="ObjectShortName">row[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/read_counter/col" type="array">
+      <obj_property name="ElementShortName">col[9:0]</obj_property>
+      <obj_property name="ObjectShortName">col[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/write_counter/inc" type="logic">
+      <obj_property name="ElementShortName">inc</obj_property>
+      <obj_property name="ObjectShortName">inc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/write_counter/row" type="array">
+      <obj_property name="ElementShortName">row[9:0]</obj_property>
+      <obj_property name="ObjectShortName">row[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/write_counter/col" type="array">
+      <obj_property name="ElementShortName">col[9:0]</obj_property>
+      <obj_property name="ObjectShortName">col[9:0]</obj_property>
+   </wvobject>
+</wave_config>

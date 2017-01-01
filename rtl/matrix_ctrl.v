@@ -16,7 +16,7 @@ module matrix_ctrl (
     input [9:0] max_row_count,	// From configuration register
     output reg [15:0] ram_sel,
     output reg [15:0] a,
-    output reg [15:0] we_out
+    output [15:0] we_out
 );
 
 
@@ -54,24 +54,15 @@ counter_2d write_counter(
 // Generate ram_sel and a from internal counters and write enable
 //
 
-reg [15:0] rs_nxt;
-reg [15:0] a_nxt;
-
 always @(*)
 begin
-    if(!RST_L) begin
-	rs_nxt = 16'h0;
-	a_nxt = 16'h0;
+    if(we) begin
+	ram_sel = (15'b1 << wr_row[9:6]);
+	a = {wr_row[5:0], wr_col[9:0]};
     end
     else begin
-	if(we) begin
-	    rs_nxt = (1'b1 << wr_row[9:6]);
-	    a_nxt = {wr_row[5:0], wr_col[9:0]};
-	end
-	else begin
-	    rs_nxt = (1'b1 << rd_row[9:6]);
-	    a_nxt = {rd_row[5:0], rd_col[9:0]};
-	end
+	ram_sel = (15'b1 << rd_row[9:6]);
+	a = {rd_row[5:0], rd_col[9:0]};
     end
 end
 
@@ -80,19 +71,6 @@ end
 // Generate we_out from input state and internal counters
 //
 
-wire we_out_nxt;
-assign we_out_nxt = {16{we}} ^ rs_nxt;
-
-
-//
-// Flops
-//
-
-always @(posedge CLK) begin
-    ram_sel <= rs_nxt;
-    a <= a_nxt;
-    we_out <= we_out_nxt;
-end
-
+assign we_out = {16{we}} & ram_sel;
 
 endmodule

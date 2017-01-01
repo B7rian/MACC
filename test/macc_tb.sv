@@ -8,6 +8,7 @@
 module macc_tb;
 
 reg clk;			// System clock
+reg rst_l;			// System reset
 reg wen_a, wen_b, wen_c;	// Write enable for each matrix
 reg ren_a, ren_b, ren_c;	// Read enable for each matrix
 reg [31:0] a_in;		// Matrix A data input
@@ -20,7 +21,8 @@ reg [31:0] c_out;		// Matrix A data output
 
 // Instantiate the MACC
 macc macc_dut(
-    .clk 		(clk),
+    .CLK 		(clk),
+    .RST_L              (rst_l),
     .wen		({wen_a, wen_b, wen_c}),
     .ren		({ren_a, ren_b, ren_c}),
     .matrix_a_in 	(a_in),
@@ -40,6 +42,9 @@ end
 // Generate clock
 initial begin
     clk = 0;
+    rst_l = 0;
+    #5
+    rst_l = 1;
 end
 
 always begin
@@ -48,6 +53,7 @@ end
 
 // Load A matrix and read back
 initial begin
+    #10
     a_in = 32'h00000000; wen_a = 1'b0; ren_a = 1'b0;
     @(negedge clk)
     a_in = 32'hdeadbeef; wen_a = 1'b1; ren_a = 1'b0;
