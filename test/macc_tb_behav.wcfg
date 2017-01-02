@@ -11,38 +11,58 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="8000000fs"></ZoomStartTime>
-      <ZoomEndTime time="23700001fs"></ZoomEndTime>
-      <Cursor1Time time="11000000fs"></Cursor1Time>
+      <ZoomStartTime time="119212800fs"></ZoomStartTime>
+      <ZoomEndTime time="134952801fs"></ZoomEndTime>
+      <Cursor1Time time="121580000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="106"></ValueColumnWidth>
+      <ValueColumnWidth column_width="104"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="23" />
+   <WVObjectSize size="28" />
    <wvobject type="divider" fp_name="divider121">
-      <obj_property name="label">Testbench</obj_property>
+      <obj_property name="label">Interface</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <wvobject fp_name="/macc_tb/m_if/CLK" type="logic">
+      <obj_property name="ElementShortName">CLK</obj_property>
+      <obj_property name="ObjectShortName">CLK</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/wen_a" type="logic">
-      <obj_property name="ElementShortName">wen_a</obj_property>
-      <obj_property name="ObjectShortName">wen_a</obj_property>
+   <wvobject fp_name="/macc_tb/m_if/RST_L" type="logic">
+      <obj_property name="ElementShortName">RST_L</obj_property>
+      <obj_property name="ObjectShortName">RST_L</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/ren_a" type="logic">
-      <obj_property name="ElementShortName">ren_a</obj_property>
-      <obj_property name="ObjectShortName">ren_a</obj_property>
+   <wvobject fp_name="/macc_tb/m_if/wen" type="array">
+      <obj_property name="ElementShortName">wen[2:0]</obj_property>
+      <obj_property name="ObjectShortName">wen[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/a_in" type="array">
-      <obj_property name="ElementShortName">a_in[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a_in[31:0]</obj_property>
+   <wvobject fp_name="/macc_tb/m_if/ren" type="array">
+      <obj_property name="ElementShortName">ren[2:0]</obj_property>
+      <obj_property name="ObjectShortName">ren[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/a_out" type="array">
-      <obj_property name="ElementShortName">a_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a_out[31:0]</obj_property>
+   <wvobject fp_name="/macc_tb/m_if/matrix_a_in" type="array">
+      <obj_property name="ElementShortName">matrix_a_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_a_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/m_if/matrix_a_out" type="array">
+      <obj_property name="ElementShortName">matrix_a_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_a_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/m_if/matrix_b_in" type="array">
+      <obj_property name="ElementShortName">matrix_b_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_b_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/m_if/matrix_b_out" type="array">
+      <obj_property name="ElementShortName">matrix_b_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_b_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/m_if/matrix_c_in" type="array">
+      <obj_property name="ElementShortName">matrix_c_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_c_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/m_if/matrix_c_out" type="array">
+      <obj_property name="ElementShortName">matrix_c_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">matrix_c_out[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider122">
       <obj_property name="label">Control</obj_property>

@@ -7,31 +7,72 @@
 
 module macc_tb;
 
-reg clk;			// System clock
-reg rst_l;			// System reset
-reg wen_a, wen_b, wen_c;	// Write enable for each matrix
-reg ren_a, ren_b, ren_c;	// Read enable for each matrix
-reg [31:0] a_in;		// Matrix A data input
-wire [31:0] a_out;		// Matrix A data output
-reg [31:0] b_in;		// Matrix B data input
-wire [31:0] b_out;		// Matrix A data output
-reg [31:0] c_in;		// Matrix B data input
-wire [31:0] c_out;		// Matrix A data output
+
+// MACC interface - move to header file sometime
+interface macc_if;
+    logic CLK;
+    logic RST_L;
+    logic [2:0] wen;
+    logic [2:0] ren;
+    logic [31:0] matrix_a_in;
+    logic [31:0] matrix_a_out;
+    logic [31:0] matrix_b_in;
+    logic [31:0] matrix_b_out;
+    logic [31:0] matrix_c_in;
+    logic [31:0] matrix_c_out;
+endinterface
+
+
+// Matrix transaction (for 1 matrix, not all 3)
+// Note: random variable not supported in vivado
+class matrix_trans; 
+    bit rd_nwrite;
+    bit [31:0] wr_data;
+endclass
+
+
+// Sequencer to generate a bunch of matrix transactions
+class matrix_seq;
+    function new();
+	// Make things predictable for now
+	$srandom(100);
+    endfunction
+
+    function matrix_trans get_next_trans();
+	matrix_trans t = new();
+	t.rd_nwrite = $urandom_range(0, 1);
+	t.wr_data = $urandom();
+	return t;
+    endfunction
+endclass
+
+
+// Driver converts transaction to DUT input signals and drives them
+// Use interface aboe to create virtual interface
+class matrix_driver;
+    virtual macc_if m_if;
+
+    function drive(matrix_trans t);
+    endfunction
+endclass
+
+
+// Instiantiate interface to get all the signals we need to drive the DUT
+macc_if m_if();
 
 
 // Instantiate the MACC
 macc macc_dut(
-    .CLK 		(clk),
-    .RST_L              (rst_l),
-    .wen		({wen_a, wen_b, wen_c}),
-    .ren		({ren_a, ren_b, ren_c}),
-    .matrix_a_in 	(a_in),
-    .matrix_a_out 	(a_out),
-    .matrix_b_in 	(b_in),
-    .matrix_b_out 	(b_out),
-    .matrix_c_in 	(c_in),
-    .matrix_c_out 	(c_out)
-
+    .CLK 		(m_if.CLK),
+    .RST_L              (m_if.RST_L),
+    .wen		(m_if.wen),
+    .ren		(m_if.ren),
+    .matrix_a_in 	(m_if.matrix_a_in),
+    .matrix_a_out 	(m_if.matrix_a_out),
+    .matrix_b_in 	(m_if.matrix_b_in),
+    .matrix_b_out 	(m_if.matrix_b_out),
+    .matrix_c_in 	(m_if.matrix_c_in),
+    .matrix_c_out 	(m_if.matrix_c_out)
 );
 
 // Make sure simulation ends
@@ -41,50 +82,50 @@ end
 
 // Generate clock
 initial begin
-    clk = 0;
-    rst_l = 0;
-    #100
-    rst_l = 1;
+    m_if.CLK = 0;
+    m_if.RST_L = 0;
+    #100	// 100ns needed for global reset to settle in BRAM
+    m_if.RST_L = 1;
 end
 
 always begin
-    #1 clk = ~clk;
+    #1 m_if.CLK = ~m_if.CLK;
 end
 
 // Load A matrix and read back
 initial begin
-    a_in = 32'h00000000; wen_a = 1'b0; ren_a = 1'b0;
+    m_if.matrix_a_in = 32'h00000000; m_if.wen[2] = 1'b0; m_if.ren[2] = 1'b0;
     #110
-    @(negedge clk)
-    a_in = 32'hdeadbeef; wen_a = 1'b1; ren_a = 1'b0;
-    @(negedge clk)
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'hdeadbeef; m_if.wen[2] = 1'b1; m_if.ren[2] = 1'b0;
+    @(negedge m_if.CLK)
     // Skip this one since write enable is 0
-    a_in = 32'ha5a5a5a5; wen_a = 1'b0; ren_a = 1'b0;
-    @(negedge clk)
-    a_in = 32'hfeed2b0b; wen_a = 1'b1; ren_a = 1'b0;
-    @(negedge clk)
-    a_in = 32'h00000001; wen_a = 1'b1; ren_a = 1'b0;
+    m_if.matrix_a_in = 32'ha5a5a5a5; m_if.wen[2] = 1'b0; m_if.ren[2] = 1'b0;
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'hfeed2b0b; m_if.wen[2] = 1'b1; m_if.ren[2] = 1'b0;
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'h00000001; m_if.wen[2] = 1'b1; m_if.ren[2] = 1'b0;
 
-    if(a_out != 32'hdeadbeef) begin
+    if(m_if.matrix_a_out != 32'hdeadbeef) begin
         $error("Matrix A read data mismatch = got %x expected deadbeef",
-	       a_out);
+	       m_if.matrix_a_out);
     end
 
-    @(negedge clk)
-    a_in = 32'hFFFFFFFF; wen_a = 1'b0; ren_a = 1'b1;
-    if(a_out != 32'hfeed2b0b) begin
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'hFFFFFFFF; m_if.wen[2] = 1'b0; m_if.ren[2] = 1'b1;
+    if(m_if.matrix_a_out != 32'hfeed2b0b) begin
         $error("Matrix A read data mismatch = got %x expected feed2b0b",
-	       a_out);
+	       m_if.matrix_a_out);
     end
 
-    @(negedge clk)
-    if(a_out != 32'h00000001) begin
+    @(negedge m_if.CLK)
+    if(m_if.matrix_a_out != 32'h00000001) begin
         $error("Matrix A read data mismatch = got %x expected 00000001",
-	       a_out);
+	       m_if.matrix_a_out);
     end
 
-    @(negedge clk)
-    a_in = 32'hFFFFFFFF; wen_a = 1'b0; ren_a = 1'b0;
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'hFFFFFFFF; m_if.wen[2] = 1'b0; m_if.ren[2] = 1'b0;
 
 end
 
