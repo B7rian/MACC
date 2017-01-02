@@ -9,8 +9,8 @@ You can read about the snickerdoodle board at [krtkl.com](http://krtkl.com)
 
 ## Current Specifications
 
-* Logic is in place to store a single matrix using up to 4096 elements
-and read it back.  Currently a 64x64 matrix is hard-coded.
+* Logic is in place to store 3 matrixes up to 4096 elements and read them 
+back.  Currently, 64x64 matrix dimensions are hard-coded.
 
 ### To Do
 * Functional test and debug
@@ -25,7 +25,9 @@ and read it back.  Currently a 64x64 matrix is hard-coded.
 
 * Support for matrices up to 64x64 in size 
     * H.265 uses 32x32, so 64x64 is plenty
-    * Audio and RF DSP will probably need 1D array - need to research the size  
+    * Audio and RF DSP will probably need 1D array - need to research the 
+      size.  Note that in audio, larger buffers increase system latency so 
+      I don't expect anyone to want huge matrices here.
 * 8, 16, 32- bit signed or unsigned integer data supported
 * Floating-point support TBD based on available Xilinx IP
 * Saturating multiply and multiply-accumulate operations. Other functions TBD. 
@@ -53,8 +55,9 @@ The seperated load and execute steps leave data sitting idle in the registers
 while the entire load operation completes, adding latency to the overall 
 system design. 
 
-In this design, the setup order is modified to allow it to operate on data 
-as soon as it becomes available. 
+Another option is to give the matrix engine access to RAM. This would 
+saturate a memory bus for every operation.  Some local storage is required
+to keep from having to transfer all data over the bus.
 
 ### High-Level Usage
 
