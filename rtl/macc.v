@@ -51,9 +51,57 @@ bram_32bx4096d_1cyc dp_A (
 );
 
 
-// TODO: Add matrices B and C later
-assign matrix_b_out = 32'h0;
-assign matrix_c_out = 32'h0;
+//
+// Instantiate control block and datapath for matrix B
+// 
+
+matrix_ctrl #(.ADDR_MSB(11)) ctrl_B (
+    .CLK (CLK),
+    .RST_L (RST_L),
+    .we (wen[1]),
+    .re (ren[1]),
+    .max_col_count (12'h3f),
+    .max_row_count (12'h3f),
+    .a (addr_to_matrix[1])
+);
+
+
+// TODO: If timing fails, regenerate BRAM with output register
+bram_32bx4096d_1cyc dp_B (
+  .clka(CLK),
+  .ena(1'b1),
+  .wea(wen[1]),
+  .addra(addr_to_matrix[1]), // 11:0
+  .dina(matrix_b_in),    // input wire [31 : 0] dina
+  .douta(matrix_b_out)   // output wire [31 : 0] douta
+);
+
+//
+// Instantiate control block and datapath for matrix C
+// 
+
+matrix_ctrl #(.ADDR_MSB(11)) ctrl_C (
+    .CLK (CLK),
+    .RST_L (RST_L),
+    .we (wen[0]),
+    .re (ren[0]),
+    .max_col_count (12'h3f),
+    .max_row_count (12'h3f),
+    .a (addr_to_matrix[0])
+);
+
+
+// TODO: If timing fails, regenerate BRAM with output register
+bram_32bx4096d_1cyc dp_C (
+  .clka(CLK),
+  .ena(1'b1),
+  .wea(wen[0]),
+  .addra(addr_to_matrix[0]), // 11:0
+  .dina(matrix_c_in),    // input wire [31 : 0] dina
+  .douta(matrix_c_out)   // output wire [31 : 0] douta
+);
+
+
 
 endmodule
 

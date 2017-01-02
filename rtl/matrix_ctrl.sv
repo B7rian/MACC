@@ -54,3 +54,4 @@ counter_2d #(.MSB(ADDR_MSB)) write_counter(
 assign a = we ? wr_a : rd_a;
 
 endmodule
+

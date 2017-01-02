@@ -39,12 +39,13 @@ always_comb begin
     // Compute log2(col_max) to figure out how much to shift a_nxt to get row
     // col_max must be a power of 2 for this to work right.
     // Note: Could use case here but wouldn't parameterize well
+    // Note 2: This looks horrible in schematic
     i = 0;
-    while(col_max[i]) begin
+    while((i <= MSB) && col_max[i]) begin
        i++;
     end
 
-    row_nxt = a_nxt >> i;
+    row_nxt = (a_nxt >> i) & row_max;
 end
 
 
