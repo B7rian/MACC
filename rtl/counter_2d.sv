@@ -31,11 +31,11 @@
 
 `timescale 1ns / 100ps
 
-module counter_2d #(parameter MSB=11) (
+module counter_2d #(parameter MSB=11, MAT_IDX_SIZE_MSB=3) (
     input CLK,
     input RST_L,
-    input [MSB:0] row_max,
-    input [MSB:0] col_max,
+    input [MAT_IDX_SIZE_MSB:0] row_idx_size,
+    input [MAT_IDX_SIZE_MSB:0] col_idx_size,
     input inc,
     output logic [MSB:0] a,	// Linerized address
     output logic [MSB:0] row,	// Row index
@@ -46,7 +46,8 @@ reg [MSB:0] a_nxt;	// Next value for address output
 reg [MSB:0] row_nxt;	// Next value for row count
 reg [MSB:0] col_nxt;	// Next value for column count
 
-int i;			// Loop counter for log2 calculation
+reg [MSB:0] col_max;	// Maximum column index
+reg [MSB:0] row_max;	// Maximum row index
 
 
 // Combinational logic 
@@ -58,18 +59,11 @@ always_comb begin
 	a_nxt = inc ? (a + 'b1) : a;
     end
 
-    col_nxt = a_nxt & col_max;
-    
-    // Compute log2(col_max) to figure out how much to shift a_nxt to get row
-    // col_max must be a power of 2 for this to work right.
-    // Note: Could use case here but wouldn't parameterize well
-    // Note 2: This looks horrible in schematic
-    i = 0;
-    while((i <= MSB) && col_max[i]) begin
-       i++;
-    end
+    col_max = (1 << col_idx_size) - 1;
+    row_max = (1 << row_idx_size) - 1;
 
-    row_nxt = (a_nxt >> i) & row_max;
+    col_nxt = a_nxt & col_max;
+    row_nxt = (a_nxt >> col_idx_size) & row_max;
 end
 
 

@@ -31,13 +31,13 @@
 
 `timescale 1ns / 100ps
 
-module matrix_ctrl #(parameter ADDR_MSB=11) (
-    input CLK,
-    input RST_L,
-    input we,
-    input re,
-    input [ADDR_MSB:0] max_col_count,	// From configuration register
-    input [ADDR_MSB:0] max_row_count,	// From configuration register
+module matrix_ctrl #(parameter ADDR_MSB=11, MAT_IDX_SIZE_MSB=3) (
+    input  CLK,
+    input  RST_L,
+    input  we,
+    input  re,
+    input  [MAT_IDX_SIZE_MSB:0] col_idx_size,
+    input  [MAT_IDX_SIZE_MSB:0] row_idx_size,
     output [ADDR_MSB:0] a
 );
 
@@ -53,22 +53,22 @@ wire [ADDR_MSB:0] wr_a;
 wire [ADDR_MSB:0] wr_row;
 wire [ADDR_MSB:0] wr_col;
 
-counter_2d #(.MSB(ADDR_MSB)) read_counter(
+counter_2d #(.MSB(ADDR_MSB), .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)) read_counter(
     .CLK (CLK),
     .RST_L (RST_L),
-    .row_max(max_row_count),
-    .col_max(max_col_count),
+    .row_idx_size(row_idx_size),
+    .col_idx_size(col_idx_size),
     .inc (re),
     .a (rd_a),
     .row (rd_row),
     .col (rd_col)
 );
 
-counter_2d #(.MSB(ADDR_MSB)) write_counter(
+counter_2d #(.MSB(ADDR_MSB), .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)) write_counter(
     .CLK (CLK),
     .RST_L (RST_L),
-    .row_max(max_row_count),
-    .col_max(max_col_count),
+    .row_idx_size(row_idx_size),
+    .col_idx_size(col_idx_size),
     .inc (we),
     .a (wr_a),
     .row (wr_row),
