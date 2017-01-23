@@ -49,98 +49,55 @@ module macc(
 localparam RAM_ADDR_MSB     = 11;
 localparam MAT_IDX_SIZE_MSB = 3;
 
-wire [RAM_ADDR_MSB:0] addr_to_ram[2:0];	// Matrix RAM address A, B, C
+// Signals for from each matrix control block to datapath
+wire [RAM_ADDR_MSB:0] addr_to_ram[2:0];
+wire wen_to_ram[2:0];
+wire [1:0] out_sel_to_dp[2:0];
+wire shift_to_dp[2:0];
+
+// Use arrays of busses to make generate block a little easier
+wire [31:0] matrix_in[2:0] = { matrix_a_in, matrix_b_in, matrix_c_in };
+wire [31:0] matrix_out[2:0];
+// Note: Vivado won't let me concat stuff on the left side of the assignment
+assign matrix_a_out = matrix_out[2];
+assign matrix_b_out = matrix_out[1];
+assign matrix_c_out = matrix_out[0];
 
 
 //
-// Instantiate control block and datapath for matrix A
+// Instantiate control block and datapath for each matrix
 // 
 
-matrix_ctrl #(
-    .ADDR_MSB(RAM_ADDR_MSB), 
-    .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)
-) 
-ctrl_A (
-    .CLK (CLK),
-    .RST_L (RST_L),
-    .we (wen[2]),
-    .re (ren[2]),
-    .col_idx_size (4'h6),
-    .row_idx_size (4'h6),
-    .a (addr_to_ram[2])
-);
+generate
+    for(genvar i = 2; i >= 0; i = i - 1) begin
+	matrix_ctrl #(
+	    .ADDR_MSB(RAM_ADDR_MSB), 
+	    .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)
+	) 
+	m_ctrl (
+	    .CLK (CLK),
+	    .RST_L (RST_L),
+	    .we (wen[i]),
+	    .re (ren[i]),
+	    .col_idx_size (4'h6),
+	    .row_idx_size (4'h6),
+	    .wen_to_ram (wen_to_ram[i]),
+	    .shift_to_dp (shift_to_dp[i]),
+	    .out_sel_to_dp (out_sel_to_dp[i]),
+	    .a (addr_to_ram[i])
+	);
 
-
-// TODO: If timing fails, regenerate BRAM with output register
-bram_32bx4096d_1cyc dp_A (
-  .clka(CLK),
-  .ena(1'b1),
-  .wea(wen[2]),
-  .addra(addr_to_ram[2]),
-  .dina(matrix_a_in),    // input wire [31 : 0] dina
-  .douta(matrix_a_out)   // output wire [31 : 0] douta
-);
-
-
-//
-// Instantiate control block and datapath for matrix B
-// 
-
-matrix_ctrl #(
-    .ADDR_MSB(RAM_ADDR_MSB), 
-    .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)
-) 
-ctrl_B (
-    .CLK (CLK),
-    .RST_L (RST_L),
-    .we (wen[1]),
-    .re (ren[1]),
-    .col_idx_size (4'h6),
-    .row_idx_size (4'h6),
-    .a (addr_to_ram[1])
-);
-
-
-// TODO: If timing fails, regenerate BRAM with output register
-bram_32bx4096d_1cyc dp_B (
-  .clka(CLK),
-  .ena(1'b1),
-  .wea(wen[1]),
-  .addra(addr_to_ram[1]),
-  .dina(matrix_b_in),    // input wire [31 : 0] dina
-  .douta(matrix_b_out)   // output wire [31 : 0] douta
-);
-
-//
-// Instantiate control block and datapath for matrix C
-// 
-
-matrix_ctrl #(
-    .ADDR_MSB(RAM_ADDR_MSB), 
-    .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)
-) 
-ctrl_C (
-    .CLK (CLK),
-    .RST_L (RST_L),
-    .we (wen[0]),
-    .re (ren[0]),
-    .col_idx_size (4'h6),
-    .row_idx_size (4'h6),
-    .a (addr_to_ram[0])
-);
-
-
-// TODO: If timing fails, regenerate BRAM with output register
-bram_32bx4096d_1cyc dp_C (
-  .clka(CLK),
-  .ena(1'b1),
-  .wea(wen[0]),
-  .addra(addr_to_ram[0]),
-  .dina(matrix_c_in),    // input wire [31 : 0] dina
-  .douta(matrix_c_out)   // output wire [31 : 0] douta
-);
-
-
+	matrix_dp m_dp (
+	  .clka (CLK),
+	  .wea (wen_to_ram[i]),
+	  .addra (addr_to_ram[i]),
+	  .dina (matrix_in[i]),
+	  .shift (shift_to_dp[i]),
+	  .out_sel (out_sel_to_dp[i]),
+	  .douta (matrix_out[i])
+	);
+    end
+endgenerate
 
 endmodule
 

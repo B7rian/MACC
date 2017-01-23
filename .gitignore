@@ -3,6 +3,7 @@ vivado/macc.hw/
 vivado/macc.ip_user_files/
 vivado/macc.sim/
 vivado/macc.runs/
+vivado/macc.srcs/
 
 ip/*/*_stub.v
 ip/*/*_stub.vhdl

@@ -11,17 +11,17 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="107900800fs"></ZoomStartTime>
-      <ZoomEndTime time="123680801fs"></ZoomEndTime>
-      <Cursor1Time time="121580000fs"></Cursor1Time>
+      <ZoomStartTime time="98151200fs"></ZoomStartTime>
+      <ZoomEndTime time="117691201fs"></ZoomEndTime>
+      <Cursor1Time time="140000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="102"></ValueColumnWidth>
+      <ValueColumnWidth column_width="96"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="26" />
+   <WVObjectSize size="22" />
    <wvobject type="divider" fp_name="divider121">
-      <obj_property name="label">Interface A</obj_property>
+      <obj_property name="label">Top Level</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject fp_name="/macc_tb/m_if/CLK" type="logic">
@@ -48,79 +48,63 @@
       <obj_property name="ElementShortName">matrix_a_out[31:0]</obj_property>
       <obj_property name="ObjectShortName">matrix_a_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/m_if/matrix_b_in" type="array">
-      <obj_property name="ElementShortName">matrix_b_in[31:0]</obj_property>
-      <obj_property name="ObjectShortName">matrix_b_in[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/m_if/matrix_b_out" type="array">
-      <obj_property name="ElementShortName">matrix_b_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">matrix_b_out[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/m_if/matrix_c_in" type="array">
-      <obj_property name="ElementShortName">matrix_c_in[31:0]</obj_property>
-      <obj_property name="ObjectShortName">matrix_c_in[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/m_if/matrix_c_out" type="array">
-      <obj_property name="ElementShortName">matrix_c_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">matrix_c_out[31:0]</obj_property>
-   </wvobject>
    <wvobject type="divider" fp_name="divider122">
       <obj_property name="label">Control A</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/we" type="logic">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /we" type="logic">
       <obj_property name="ElementShortName">we</obj_property>
       <obj_property name="ObjectShortName">we</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/re" type="logic">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /re" type="logic">
       <obj_property name="ElementShortName">re</obj_property>
       <obj_property name="ObjectShortName">re</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/a" type="array">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /out_sel_to_dp" type="array">
+      <obj_property name="ElementShortName">out_sel_to_dp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">out_sel_to_dp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /wen_to_ram" type="logic">
+      <obj_property name="ElementShortName">wen_to_ram</obj_property>
+      <obj_property name="ObjectShortName">wen_to_ram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /shift_to_dp" type="logic">
+      <obj_property name="ElementShortName">shift_to_dp</obj_property>
+      <obj_property name="ObjectShortName">shift_to_dp</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /rd_ahead_cnt" type="array">
+      <obj_property name="ElementShortName">rd_ahead_cnt[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_ahead_cnt[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /a" type="array">
       <obj_property name="ElementShortName">a[11:0]</obj_property>
       <obj_property name="ObjectShortName">a[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/rd_row" type="array">
-      <obj_property name="ElementShortName">rd_row[11:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_row[11:0]</obj_property>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /ram_dvalid" type="array">
+      <obj_property name="ElementShortName">ram_dvalid[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ram_dvalid[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/rd_col" type="array">
-      <obj_property name="ElementShortName">rd_col[11:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_col[11:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/wr_row" type="array">
-      <obj_property name="ElementShortName">wr_row[11:0]</obj_property>
-      <obj_property name="ObjectShortName">wr_row[11:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/ctrl_A/wr_col" type="array">
-      <obj_property name="ElementShortName">wr_col[11:0]</obj_property>
-      <obj_property name="ObjectShortName">wr_col[11:0]</obj_property>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_ctrl /rb_dvalid" type="array">
+      <obj_property name="ElementShortName">rb_dvalid[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rb_dvalid[1:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider123">
       <obj_property name="label">RAM interface</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/clka" type="logic">
-      <obj_property name="ElementShortName">clka</obj_property>
-      <obj_property name="ObjectShortName">clka</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/ena" type="logic">
-      <obj_property name="ElementShortName">ena</obj_property>
-      <obj_property name="ObjectShortName">ena</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/wea" type="array">
-      <obj_property name="ElementShortName">wea[0:0]</obj_property>
-      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/addra" type="array">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_dp /matrix_ram/addra" type="array">
       <obj_property name="ElementShortName">addra[11:0]</obj_property>
       <obj_property name="ObjectShortName">addra[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/dina" type="array">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_dp /matrix_ram/wea" type="array">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_dp /matrix_ram/dina" type="array">
       <obj_property name="ElementShortName">dina[31:0]</obj_property>
       <obj_property name="ObjectShortName">dina[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/macc_tb/macc_dut/dp_A/douta" type="array">
+   <wvobject fp_name="/macc_tb/macc_dut/\genblk1[2].m_dp /matrix_ram/douta" type="array">
       <obj_property name="ElementShortName">douta[31:0]</obj_property>
       <obj_property name="ObjectShortName">douta[31:0]</obj_property>
    </wvobject>

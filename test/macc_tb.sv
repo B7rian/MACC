@@ -129,6 +129,11 @@ initial begin
     m_if.matrix_a_in = 32'hfeed2b0b; m_if.wen[2] = 1'b1; m_if.ren[2] = 1'b0;
     @(negedge m_if.CLK)
     m_if.matrix_a_in = 32'h00000001; m_if.wen[2] = 1'b1; m_if.ren[2] = 1'b0;
+    @(negedge m_if.CLK)
+    m_if.matrix_a_in = 32'hf0f0f0f0; m_if.wen[2] = 1'b0; m_if.ren[2] = 1'b0;
+    @(negedge m_if.CLK)
+    @(negedge m_if.CLK)
+    @(negedge m_if.CLK)
 
     if(m_if.matrix_a_out != 32'hdeadbeef) begin
         $error("Matrix A read data mismatch = got %x expected deadbeef",
