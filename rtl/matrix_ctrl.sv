@@ -83,83 +83,75 @@ counter_2d #(.MSB(ADDR_MSB), .MAT_IDX_SIZE_MSB(MAT_IDX_SIZE_MSB)) wr_counter (
 );
 
 
-logic [1:0] ram_dvalid;		// 1 -> internal latch, 0 -> dout
-logic [1:0] ram_dvalid_nxt;
-logic [1:0] rb_dvalid;		// 1 -> read_buf[1], 0 -> read_buf[0]
-logic [1:0] rb_dvalid_nxt;
-logic [1:0] rb_read_mask;	// Identifies which rb entry is read
-logic [1:0] rd_ahead_cnt;	// Read-ahead amount for read_buf pre-load
-logic [1:0] rd_ahead_cnt_nxt;
+//
+// pre-read control: Determine how many addresses to read-ahead.  
+//
+// Usually this will be 2 (because there will be 2 entries in the read 
+// buffer) but for the pre-load we'll need to start at 0 and work our 
+// way up to 2
+//
 
+logic [1:0] read_ahead_cnt, read_ahead_cnt_nxt;
+logic do_preread;
 
-// Drive the RAM address and handle pre-read of data when RAM is being loaded.
-// Once we're past the first few addresses, we can always look-ahead by the
-// number of read buffers.
+assign do_preread = (read_ahead_cnt < 'h2) & (wr_a >= 'h2) & ~we;
+
 always_comb begin
-    if(!RST_L) begin
-	rd_ahead_cnt_nxt = 'h0;
+    priority if(~RST_L) begin
+	read_ahead_cnt_nxt = 'h0;
+    end
+    else if(do_preread) begin
+	read_ahead_cnt_nxt = read_ahead_cnt + 'h1;
     end
     else begin
-	if((wr_a >= 'h2) & (rd_ahead_cnt < 'h2) & shift_to_dp) begin
-	    rd_ahead_cnt_nxt = rd_ahead_cnt + 'h1;
-	end
+	read_ahead_cnt_nxt = read_ahead_cnt;
     end
 end
 
 always_ff @(posedge CLK) begin
-    rd_ahead_cnt <= rd_ahead_cnt_nxt;
+    read_ahead_cnt <= read_ahead_cnt_nxt;
 end
 
-assign a = we ? wr_a : (rd_a + rd_ahead_cnt);
+// Augment BRAM state machine read-enable to pre-read data when available
+logic ram_re;
+assign ram_re = re | do_preread;
 
 
-// Track which data sources are valid and shift data when RAM data is valid
-// and space is available
-always_comb begin
-    if(!RST_L) begin
-	ram_dvalid_nxt = 'h0;
-	rb_read_mask = 'b00;
-	rb_dvalid_nxt = 'h0;
-    end
-    else begin
-	ram_dvalid_nxt[1] = ~we & (re | ((rd_ahead_cnt < 'h2) & (wr_a >= 'h2)));
-	ram_dvalid_nxt[0] = ram_dvalid[1] 
-			  | (ram_dvalid[0] 
-			      & ~shift_to_dp
-			      & ~(re & ~rb_dvalid[0] & ~rb_dvalid[1]));
+// 
+// Track BRAM read state and read buffer fill level
+//
 
-	priority casez(rb_dvalid) 
-	    'b10: rb_read_mask = 'b10;
-	    'b?1: rb_read_mask = 'b01;
-	    'b00: rb_read_mask = 'b00;
-	endcase
+logic ram_dvalid;	// 1 when BRAM douta has new data
+logic [1:0] rb_cnt;	// Number of entries in read buffer
+logic rb_full;		// 1 when the read buffers are all full
 
-	unique casez({re, shift_to_dp})
-	    'b00: rb_dvalid_nxt = rb_dvalid;
-	    'b10: rb_dvalid_nxt = rb_dvalid & ~rb_read_mask;
-	    'b?1: rb_dvalid_nxt = {ram_dvalid[0], rb_dvalid[1]};
-	endcase
-    end
+bram_sm bram_state (
+    .CLK (CLK),
+    .RST_L (RST_L),
+    .re (ram_re),
+    .ram_dvalid (ram_dvalid)
+);
 
-    priority casez(rb_dvalid)
-	// TODO: enum this sel signal
-	'b?1:    out_sel_to_dp = 'b00;
-	'b10:    out_sel_to_dp = 'b01;
-	default: out_sel_to_dp = 'b11;
-    endcase
-
-    shift_to_dp = ram_dvalid[0] & (re | ~rb_dvalid[0]);
-end
-
-always_ff @(posedge CLK) begin
-    ram_dvalid <= ram_dvalid_nxt;
-    rb_dvalid <= rb_dvalid_nxt;
-end
+read_buf_cnt rbc (
+    .CLK (CLK),
+    .RST_L (RST_L),
+    .re (re),
+    .ram_dvalid (ram_dvalid),
+    .rb_cnt (rb_cnt),
+    .rb_full (rb_full)
+);
 
 
-// RAM write-enable is pretty straghitforward
+//
+// Drive remaining outputs.  Mess with the read address so we can pre-read
+// address 0 and 1 when available and are 2 address ahead of the counter above
+// after that
+//
+
 assign wen_to_ram = we;
-
+assign shift_to_dp = ram_dvalid & ~rb_full;
+assign out_sel_to_dp = rb_cnt;
+assign a = we ? wr_a : (rd_a + read_ahead_cnt);
 
 endmodule
 

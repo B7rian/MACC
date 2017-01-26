@@ -1,5 +1,5 @@
 //
-// matrix_dp.v: RAM with some registers to hide RAM read latency
+// read_buf_cnt.v: Read buffer counter / state machine
 //
 //---
 // The MIT License (MIT)
@@ -28,53 +28,38 @@
 
 `timescale 1ns / 100ps
 
-module matrix_dp #(parameter ADDR_MSB=11) (
-    input  clka,
-    input  wea,
-    input  [ADDR_MSB:0] addra,
-    input  [31:0] dina,
-    input  shift,		// Shift control for read buffer
-    input  [1:0] out_sel, 	// Output select for RAM or read buffer
-    output logic [31:0] douta
+module read_buf_cnt (
+    input  CLK,
+    input  RST_L,
+    input  re,
+    input  ram_dvalid,
+    output logic [1:0] rb_cnt,
+    output logic rb_full
 );
 
+logic [1:0] rb_cnt_nxt;
 
-// Instantiate RAM to hold matrix data
-wire [31:0] ram_douta;
-
-bram_32bx4096d_2cyc matrix_ram (
-  .clka(clka),
-  .ena(1'b1),
-  .wea(wea),
-  .addra(addra),
-  .dina(dina),
-  .douta(ram_douta)
-);
-
-
-// Create some buffers to hide RAM read latency.
-// Shift order: BRAM -> read_buf[1] -> read_buf[0]
-// TODO: Parameterize read buffer depth
-logic [31:0] read_buf_nxt[1:0];
-logic [31:0] read_buf[1:0];
-
-assign read_buf_nxt[1] = shift ? ram_douta : read_buf[1];
-assign read_buf_nxt[0] = shift ? read_buf[1] : read_buf[0];
-
-always_ff @(posedge clka) begin
-    read_buf <= read_buf_nxt;
-end
-
-// Data output mux
 always_comb begin
-    unique casez(out_sel)
-        // TODO: enum this sel signal
-        2'b1?: douta = read_buf[0];
-	2'b01: douta = read_buf[1];
-	2'b00: douta = ram_douta;
-    endcase
+    if(~RST_L) begin
+	rb_cnt_nxt = 'h0;
+    end
+    else begin
+	rb_cnt_nxt = rb_cnt;
+
+	unique case(rb_cnt)
+	    'h0: if(ram_dvalid & ~re) rb_cnt_nxt = rb_cnt + 'h1;
+	    'h1: unique if(ram_dvalid & ~re) rb_cnt_nxt = rb_cnt + 'h1;
+		 else if(~ram_dvalid & re) rb_cnt_nxt = rb_cnt - 'h1;
+	    'h2: if(re) rb_cnt_nxt = rb_cnt - 'h1;
+	endcase
+    end
 end
 
+always_ff @(posedge CLK) begin
+    rb_cnt <= rb_cnt_nxt;
+end
+
+assign rb_full = (rb_cnt == 'h2);
 
 endmodule
 
